@@ -14,6 +14,7 @@ const devURL = "http://localhost:5173";
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
     webPreferences: {
+      devTools: !process.isPackaged,
       contextIsolation: false,
       nodeIntegration: true,
       preload: path.join(__dirname, "preload.js"),
