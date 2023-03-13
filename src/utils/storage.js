@@ -12,7 +12,8 @@ export default {
    * @param {*} fileList 
    */
   setFileList(fileList = []) {
-    const list = JSON.parse(JSON.stringify(fileList))
+    console.log(JSON.parse(JSON.stringify(fileList)))
+    const list = JSON.parse(JSON.stringify(fileList)).filter(f => f.path)
     localStorage.setItem(storageKeys.FILE_LIST, JSON.stringify(list.map(v => v.path)))
   },
   /**

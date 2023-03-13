@@ -18,12 +18,27 @@ export default createStore({
       storage.setFileList(payload)
     },
     addFile(state, file) {
+      console.log('store addFile:', file);
       const fileList = JSON.parse(JSON.stringify(state.fileList))
       const fileIndex = fileList.findIndex(f => f.path === file.path)
-      if (fileIndex === -1) {
+      console.log(fileIndex);
+      if (fileIndex === -1 || !file.path) {
         fileList.push(file)
       } else {
         const newFile = Object.assign(fileList[fileIndex], file)
+        fileList.splice(fileIndex, 1, newFile)
+      }
+      state.fileList = fileList
+      storage.setFileList(fileList)
+    },
+    addNewFile(state, payload) {
+      const { file, newFile } = payload
+      console.log(file, newFile);
+      const fileList = JSON.parse(JSON.stringify(state.fileList))
+      const fileIndex = fileList.findIndex(f => f.name === file.name)
+      if (fileIndex === -1) {
+        fileList.push(newFile)
+      } else {
         fileList.splice(fileIndex, 1, newFile)
       }
       state.fileList = fileList

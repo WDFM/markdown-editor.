@@ -27,12 +27,15 @@
       </el-tab-pane>
     </el-tabs>
 
-    <EmptyActions v-show="$store.getters.fileList.length === 0" />
+    <EmptyActions
+      v-if="$store.getters.fileList.length === 0"
+      @addFile="addNewFile"
+    />
   </div>
 </template>
 
 <script setup>
-import { defineComponent, ref, onMounted } from "vue";
+import { defineComponent, ref, onMounted, nextTick } from "vue";
 import renderer from "@/utils/renderer";
 import { useStore } from "vuex";
 import { ElMessage, ElMessageBox } from "element-plus";
@@ -52,13 +55,47 @@ renderer.openFileAsString().then((file) => {
   currentFile.value = store.getters.fileList.length - 1;
 });
 
+// 响应菜单新建
+renderer.addNewFile(() => {
+  addNewFile();
+});
+/**
+ * 新建文档
+ */
+const addNewFile = () => {
+  let name = null;
+  for (let i = 1; i <= 1000; i++) {
+    const tempName = `未命名-${i}.md`;
+    console.log(
+      tempName,
+      store.getters.fileList.some((f) => f.name === tempName)
+    );
+    if (!store.getters.fileList.some((f) => f.name === tempName)) {
+      name = tempName;
+      break;
+    }
+  }
+  console.log(name);
+  store.commit("addFile", {
+    name,
+    fileData: "",
+  });
+  nextTick(() => (currentFile.value = store.getters.fileList.length - 1));
+};
+
 /**
  * 保存文件
  * @param {*} file
  */
 const saveFile = (file) => {
-  console.log(file);
+  // console.log(file);
   if (file.fileData === file.tempData) return;
+  // 如果文件没有路径，按照新文件来保存
+  if (!file.path) {
+    saveNewFile(file);
+    return;
+  }
+
   loading.value = true;
   // return new Promise((resolve, reject) => {
   return renderer
@@ -66,6 +103,7 @@ const saveFile = (file) => {
     .then((path, fileData) => {
       console.log("saved", path, fileData);
       Promise.resolve();
+      ElMessage.success("已保存！");
     })
     .catch((e) => {
       console.log("save failed! ", e);
@@ -77,6 +115,32 @@ const saveFile = (file) => {
     });
   // });
 };
+
+/**
+ * 保存新文件
+ * @param {*} file
+ */
+const saveNewFile = (file) => {
+  loading.value = true;
+  renderer
+    .openSaveFile(JSON.parse(JSON.stringify(file)))
+    .then(() => {
+      ElMessage.success("已保存！");
+    })
+    .catch((e) => {
+      ElMessage.error(e);
+    })
+    .finally(() => (loading.value = false));
+};
+// 响应菜单保存文件
+renderer.saveFileMenu(() => {
+  saveFile(store.getters.fileList[currentFile.value]);
+});
+
+// 响应菜单关闭文件
+renderer.closeFile(() => {
+  closeFile(currentFile.value);
+});
 
 /**
  * 关闭文件
@@ -132,8 +196,12 @@ onMounted(() => {
 
 <style lang="less" scoped>
 .home {
+  & :deep(.el-tabs__header) {
+    margin-bottom: 0;
+  }
+
   & :deep(.el-tabs__content) {
-    height: calc(100% - 41px - 15px);
+    height: calc(100% - 41px);
   }
 
   & :deep(.el-tab-pane) {
