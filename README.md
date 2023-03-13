@@ -1,9 +1,7 @@
-:::align-center
- # Markdown Editor
+<h1 align="center">Markdown Editor</h1>
 <p align="center">
   <a href="https://www.npmjs.com/package/@kangc/v-md-editor"><img src="https://img.shields.io/npm/l/@kangc/v-md-editor.svg?sanitize=true" alt="License"></a>
 </p>
-:::
 
 ## Install
 ```bash
