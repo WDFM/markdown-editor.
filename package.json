@@ -35,7 +35,8 @@
       "output": "release/${version}"
     },
     "files": [
-      "dist"
+      "dist",
+      "electron"
     ],
     "mac": {
       "artifactName": "${productName}_${version}.${ext}",
