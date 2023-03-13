@@ -209,7 +209,34 @@ module.exports = function (mainWindow) {
         click: () => {
           mainWindow.webContents.send("grammer-menu", "todo")
         }
-      }
+      },
+      {
+        role: "align",
+        label: "对齐",
+        submenu: [
+          {
+            role: "align-center",
+            label: "居中对齐",
+            click: () => {
+              mainWindow.webContents.send("grammer-menu", "align-center")
+            }
+          },
+          {
+            role: "align-left",
+            label: "左对齐",
+            click: () => {
+              mainWindow.webContents.send("grammer-menu", "align-left")
+            }
+          },
+          {
+            role: "align-right",
+            label: "右对齐",
+            click: () => {
+              mainWindow.webContents.send("grammer-menu", "align-right")
+            }
+          },
+        ]
+      },
     ],
   };
 };

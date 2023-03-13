@@ -46,11 +46,13 @@ import createTodoListPlugin from "@kangc/v-md-editor/lib/plugins/todo-list/index
 import "@kangc/v-md-editor/lib/plugins/todo-list/todo-list.css";
 import createCopyCodePlugin from "@kangc/v-md-editor/lib/plugins/copy-code/index";
 import "@kangc/v-md-editor/lib/plugins/copy-code/copy-code.css";
+import createAlignPlugin from '@kangc/v-md-editor/lib/plugins/align';
+import createLineNumbertPlugin from '@kangc/v-md-editor/lib/plugins/line-number/index';
 
 // 模式。可选值：edit(纯编辑模式) editable(编辑与预览模式) preview(纯预览模式)。
-const mode = ref("edit");
+const mode = ref("editable");
 // 是否默认显示目录导航。
-const defaultShowToc = ref(true);
+const defaultShowToc = ref(false);
 
 VueMarkdownEditor.use(vuepressTheme, {
   Prism,
@@ -64,6 +66,8 @@ VueMarkdownEditor.use(vuepressTheme, {
 VueMarkdownEditor.use(createKatexPlugin());
 VueMarkdownEditor.use(createTodoListPlugin());
 VueMarkdownEditor.use(createCopyCodePlugin());
+VueMarkdownEditor.use(createAlignPlugin());
+VueMarkdownEditor.use(createLineNumbertPlugin());
 
 defineComponent({ VueMarkdownEditor });
 const props = defineProps({ file: Object });

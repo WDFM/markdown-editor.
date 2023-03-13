@@ -1,8 +1,13 @@
 /**
  * 自定义菜单操作
  */
-function customAction(editor, prefix = "", suffix = "", placeholder = "请输入文本") {
-  if (!editor) return
+function customAction(
+  editor,
+  prefix = "",
+  suffix = "",
+  placeholder = "请输入文本"
+) {
+  if (!editor) return;
   editor.insert(function (selected) {
     const content = selected || placeholder;
 
@@ -20,7 +25,7 @@ function tipAction(editor, type) {
   const prefix = `::: ${type}\n`;
   const suffix = "\n:::";
   const placeholder = "请输入文本";
-  customAction(editor, prefix, suffix, placeholder)
+  customAction(editor, prefix, suffix, placeholder);
 }
 
 /**
@@ -114,14 +119,26 @@ export default function excuteGrammerMenu(editor, role) {
 
     // 数学公式
     case "katex":
-      customAction(editor, "$$", "$$", "\sum_{i=1}^n a_i=0")
+      customAction(editor, "$$", "$$", "sum_{i=1}^n a_i=0");
       break;
     // 流程图
     // case "mermaid":
     //   break;
     // 待办
     case "todo":
-      customAction(editor, "- [x] ", "", "任务列表")
+      customAction(editor, "- [x] ", "", "任务列表");
+      break;
+    // 居中对齐
+    case "align-center":
+      customAction(editor, ":::align-center\n ", "\n:::", "居中对齐");
+      break;
+    // 左对齐
+    case "align-left":
+      customAction(editor, ":::align-left\n ", "\n:::", "左对齐");
+      break;
+    // 右对齐
+    case "align-right":
+      customAction(editor, ":::align-right\n ", "\n:::", "右对齐");
       break;
   }
 }
